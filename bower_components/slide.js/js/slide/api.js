@@ -1,4 +1,4 @@
-var HOST = 'slide-dev.ngrok.com';
+var HOST = 'api-sandbox.slide.life';
 
 export default {
   endpoint: function(/* protocol, */ path) {

@@ -30850,7 +30850,7 @@ Actor.prototype.listen = function(cb) {
 exports["default"] = Actor;
 },{"./api":3}],3:[function(require,module,exports){
 "use strict";
-var HOST = 'slide-dev.ngrok.com';
+var HOST = 'api-sandbox.slide.life';
 
 exports["default"] = {
   endpoint: function(/* protocol, */ path) {
