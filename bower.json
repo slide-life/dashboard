@@ -1,0 +1,17 @@
+{
+  "name": "forms",
+  "version": "0.0.0",
+  "homepage": "https://github.com/slide-life/forms",
+  "description": "Form builder",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "slide.js": "git@github.com:slide-life/slide.js.git",
+    "jquery": "~2.1.1"
+  }
+}

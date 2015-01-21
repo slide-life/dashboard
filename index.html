@@ -1,0 +1,104 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Form</title>
+    <link rel="stylesheet" href="bower_components/slide.js/dist/css/slide.css" />
+  </head>
+  <body>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <script src="bower_components/slide.js/dist/js/slide.js"></script>
+    <script type="text/javascript">
+      var userData = {
+        "slide.life:bank.account": [
+          {
+            "slide.life:bank.account.number": "01231921",
+            "slide.life:bank.account.routing": "41232121391",
+            "slide.life:bank.account.IBAN": "US-123-KEDM-41232121391",
+            "slide.life:bank.account.swift-code": "012-123-123"
+          }
+        ],
+        "slide.life:name": [
+          {
+            "slide.life:name.first": "John",
+            "slide.life:name.middle": "Michael",
+            "slide.life:name.last": "Doe"
+          }
+        ],
+        "slide.life:university": [
+          {
+            "slide.life:university.name": "Harvard",
+            "slide.life:university.id": "40943568",
+            "slide.life:university.current-level": "Sophomore",
+            "slide.life:university.graduation-year": "2018",
+            "slide.life:university.major": "Computer Science",
+            "slide.life:university.residence": "Hollis"
+          }
+        ],
+        "slide.life:address": [
+          {
+            "slide.life:address.residence": "1",
+            "slide.life:address.street": "Oxford Street",
+            "slide.life:address.city": "Cambridge",
+            "slide.life:address.state": "Massachusetts",
+            "slide.life:address.zip-code": "02138",
+            "slide.life:address.country": "United States"
+          }
+        ],
+        "slide.life:bank.card": [
+          {
+            "slide.life:bank.card.number": "4351435253459",
+            "slide.life:bank.card.security-code": "439",
+            "slide.life:bank.card.start-date": "01-03",
+            "slide.life:bank.card.expiry-date": "11-01"
+          },
+          {
+            "slide.life:bank.card.number": "12312312123",
+            "slide.life:bank.card.security-code": "151",
+            "slide.life:bank.card.start-date": "05-11",
+            "slide.life:bank.card.expiry-date": "12-15"
+          }
+        ],
+        "slide.life:mobile-phone": [
+          {
+            "slide.life:mobile-phone.number": "8572344912",
+            "slide.life:mobile-phone.extension": "+1"
+          }
+        ],
+        "slide.life:home-phone": [
+          {
+            "slide.life:home-phone.number": "1921232121",
+            "slide.life:home-phone.extension": "+1"
+          }
+        ],
+        "slide.life:passport": [
+          {
+            "slide.life:passport.number": "213423142134",
+            "slide.life:passport.start-date": "04-12",
+            "slide.life:passport.expiry-date": "07-25",
+            "slide.life:passport.country-of-issue": "United Kingdom"
+          }
+        ],
+        "slide.life:id-card": [
+          {
+            "slide.life:id-card.number": "1232131212",
+            "slide.life:id-card.start-date": "04-06",
+            "slide.life:id-card.expiry-date": "09-16"
+          }
+        ],
+        "slide.life:drivers-license": [
+          {
+            "slide.life:drivers-license.number": "1232111221",
+            "slide.life:drivers-license.start-date": "02-12",
+            "slide.life:drivers-license.expiry-date": "09-21"
+          }
+        ]
+      };
+
+      var CARDS = ['slide.life:bank.card', 'slide.life:bank.account', 'slide.life:name',
+              'slide.life:mobile-phone', 'slide.life:home-phone', 'slide.life:university',
+              'slide.life:passport', 'slide.life:id-card', 'slide.life:drivers-license',
+              'slide.life:address'];
+      Slide.presentModalFormFromIdentifiers(CARDS, userData);
+    </script>
+  </body>
+</html>
