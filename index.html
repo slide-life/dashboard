@@ -13,10 +13,6 @@
               'slide.life:passport', 'slide.life:id-card', 'slide.life:drivers-license',
               'slide.life:address'];
 
-      function showModal(userData) {
-        Slide.presentModalFormFromIdentifiers(CARDS, userData);
-      }
-
       // Load a user or create a new one
       function loadUser(cb) {
         Slide.User.load(function(next) {
@@ -29,9 +25,11 @@
 
       loadUser(function(user) {
         user.getProfile(function(profile) {
-          showModal(profile);
-          user.patchProfile(serializePatch(profile), function(patch) {
-            console.log("assert", profile, patch);
+          Slide.presentModalFormFromIdentifiers(CARDS, profile, function(form) {
+            var patch = form.getPatchedUserData();
+            user.patchProfile(Slide.User.serializeProfile(patch), function() {
+              console.log("assert", profile, patch);
+            });
           });
         });
       });
