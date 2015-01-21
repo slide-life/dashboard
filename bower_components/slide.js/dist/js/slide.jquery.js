@@ -31428,7 +31428,8 @@ Form.prototype.build = function (userData, options) {
 
   this.userData = userData;
   this.options = options;
-  this.$form = $('<ul></ul>', { 'class': 'slide-form' }).appendTo(this.$container);
+  this.$form = $('<ul></ul>', { 'class': 'slide-form' });
+  this.$container.html(this.$form);
 
   $.each(this.fields, function (identifier, field) {
     if (self._isCard(identifier)) {
@@ -31635,13 +31636,15 @@ Form.prototype._getFieldsForSelector = function (selector, multi /* = false */) 
   return this._getFieldsInElement(this.$form.find(selector), multi);
 };
 
-Form.prototype.serialize = function () {
+Form.prototype.getData = function () {
   var cardFieldsSelector = '.card.slick-active .card-subfields';
   var compoundFieldsSelector = '.compound-wrapper .slick-active';
 
-  var keystore = this._getFieldsForSelector([cardFieldsSelector, compoundFieldsSelector].join(', '));
+  return this._getFieldsForSelector([cardFieldsSelector, compoundFieldsSelector].join(', '));
+};
 
-  return JSON.stringify(keystore);
+Form.prototype.serialize = function () {
+  return JSON.stringify(this.getData());
 };
 
 Form.prototype.getUserData = function () {
@@ -31674,6 +31677,12 @@ Form.prototype.getPatchedUserData = function () {
   return patch;
 };
 
+Form.prototype.getStringifiedPatchedUserData = function () {
+  return this.getPatchedUserData().map(function (patch) {
+    return JSON.stringify(patch);
+  });
+};
+
 exports["default"] = Form;
 },{"./block":4}],8:[function(require,module,exports){
 "use strict";
@@ -31698,14 +31707,14 @@ User.serializeProfile = function(patch) {
     prepped[k.replace(/\./g, '/')] = JSON.stringify(patch[k]);
   }
   return prepped;
-}
+};
 User.deserializeProfile = function(patch) {
   var prepped = {};
   for( var k in patch ) {
     prepped[k.replace(/\//g, '.')] = JSON.parse(patch[k]);
   }
   return prepped;
-}
+};
 
 User.prompt = function(cb) {
   var user = new this();

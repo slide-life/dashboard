@@ -14,25 +14,39 @@
               'slide.life:address'];
 
       // Load a user or create a new one
-      function loadUser(cb) {
+      function loadUser($modal, cb) {
         Slide.User.load(function(next) {
-          Slide.User.register("18572344988", function(user) {
-            user.persist();
-            next(user);
+          Slide.Form.createFromIdentifiers($modal.find('.slide-modal-body'), ['slide.life:mobile-phone'], function (form) {
+            form.build({}, {
+              onSubmit: function () {
+                var data = form.getData();
+                var number = data['slide.life:mobile-phone.extension'] + data['slide.life:mobile-phone.number'];
+                Slide.User.register(number, function(user) {
+                  user.persist();
+                  next(user);
+                });
+              }
+            });
           });
         }, cb);
       }
 
-      loadUser(function(user) {
+      var $modal = Slide.prepareModal();
+      loadUser($modal, function(user) {
         user.getProfile(function(profile) {
-          Slide.presentModalFormWithIdentifiers(profileCards, Slide.User.deserializeProfile(profile), function(form) {
-            var patch = form.getUserData();
-            user.patchProfile(Slide.User.serializeProfile(patch), function() {
-              console.log("assert", profile, patch);
+          Slide.Form.createFromIdentifiers($modal.find('.slide-modal-body'), profileCards, function (form) {
+            form.build(Slide.User.deserializeProfile(profile), {
+              onSubmit: function () {
+                var patch = form.getUserData();
+                user.patchProfile(Slide.User.serializeProfile(patch), function() {
+                  console.log("assert", profile, patch);
+                });
+              }
             });
           });
         });
       });
+      $modal.show();
     </script>
   </body>
 </html>
