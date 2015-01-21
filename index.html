@@ -8,7 +8,7 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/slide.js/dist/js/slide.js"></script>
     <script type="text/javascript">
-      var CARDS = ['slide.life:bank.card', 'slide.life:bank.account', 'slide.life:name',
+      var profileCards = ['slide.life:bank.card', 'slide.life:bank.account', 'slide.life:name',
               'slide.life:mobile-phone', 'slide.life:home-phone', 'slide.life:university',
               'slide.life:passport', 'slide.life:id-card', 'slide.life:drivers-license',
               'slide.life:address'];
@@ -25,7 +25,7 @@
 
       loadUser(function(user) {
         user.getProfile(function(profile) {
-          Slide.presentModalFormWithIdentifiers(CARDS, Slide.User.deserializeProfile(profile), function(form) {
+          Slide.presentModalFormWithIdentifiers(profileCards, Slide.User.deserializeProfile(profile), function(form) {
             var patch = form.getUserData();
             user.patchProfile(Slide.User.serializeProfile(patch), function() {
               console.log("assert", profile, patch);
