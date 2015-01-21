@@ -18,11 +18,11 @@
     "forge": "0.6.20",
     "slick-carousel": "1.3.15"
   },
-  "_release": "bba69ca3db",
+  "_release": "d61cfa7d2e",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "bba69ca3db491483864c14096fed9762d659a750"
+    "commit": "d61cfa7d2e264622797fa85b8efefb9dace47339"
   },
   "_source": "git@github.com:slide-life/slide.js.git",
   "_target": "*",

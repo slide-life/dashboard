@@ -15,13 +15,13 @@ VendorUser.prototype.fromObject = function(obj) {
   this.symmetricKey = obj.symmetricKey;
 };
 
-VendorUser.prototype.load = function(user, cb) {
+VendorUser.prototype.load = function(cb) {
   var self = this;
-  $.get(Slide.endpoint('/vendor_users/' + this.uuid),
-    function(vendor) {
-      self.fromObject(vendor, user);
+  api.get('/vendor_users/' + this.uuid,
+    { success: function(vendor) {
+      self.fromObject(vendor);
       cb(self);
-    });
+    }});
 };
 
 VendorUser.createRelationship = function(user, vendor, cb) {
@@ -30,7 +30,7 @@ VendorUser.createRelationship = function(user, vendor, cb) {
     keys = k;
   });
   var key = Slide.crypto.AES.generateKey();
-  var userKey = Slide.crypto.encryptStringWithPackedKey(key, vendor.publicKey);
+  var userKey = Slide.crypto.encryptStringWithPackedKey(key, user.publicKey);
   var vendorKey = Slide.crypto.encryptStringWithPackedKey(key, vendor.publicKey);
   var checksum = Slide.crypto.encryptStringWithPackedKey('', user.publicKey);
   api.post('/vendors/'+vendor.id+'/vendor_users', {

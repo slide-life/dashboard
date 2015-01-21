@@ -428,13 +428,26 @@
   background-color: #F3F3F3;
   padding: 18px;
   height: 40px;
-  border-bottom: 1px solid #C0C0C0; }
+  border-bottom: 1px solid #C0C0C0;
+  position: relative; }
 
 .slide-modal-header .slide-logo {
   width: 55px;
   height: 40px;
   margin: 0 auto;
   background-image: url("../img/logo.jpg"); }
+
+.slide-modal-action {
+  position: absolute;
+  top: 0; }
+
+.slide-modal-action a {
+  color: #333;
+  text-decoration: none;
+  line-height: 80px; }
+
+.slide-moda-action a:hover {
+  background: #ccc; }
 
 /* Slick styling */
 .slick-slide {

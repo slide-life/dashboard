@@ -30688,22 +30688,39 @@ var Slide = {
   prepareModal: function (title) {
     if (!this._modal) {
       this._modal = $('<div class="slide-modal"></div>');
-      var header = $('<div class="slide-modal-header"></div>').append('<div class="slide-logo"></div>');
+      var header = $('<div class="slide-modal-header"></div>').append('<div class="slide-logo"></div>', '<div class="slide-modal-action"></div>');
       this._modal.append(header, '<div class="slide-modal-body"></div>');
       this._modal.appendTo($('body'));
     }
     return this._modal;
   },
 
-  presentVendorForms: function(forms, vendor, cb) {
+  insertVendorForm: function(form, vendor, onClick) {
+    var modal = this.prepareModal('Your Forms');
+    var list = modal.find('.form-list');
+    var li = $("<li></li>");
+    li.click(function(evt) {
+      onClick(form);
+    });
+    li.text(form.name);
+    list.prepend(li);
+  },
+
+  presentVendorForms: function(forms, vendor, onCreate, onClick) {
     var modal = this.prepareModal('Your Forms');
     modal.toggle();
     var list = $("<ul class='form-list'></ul>");
     modal.append(list);
+    var addBtn = $('<a href="#">Add</a>');
+    modal.find('.slide-modal-action').append(addBtn);
+    addBtn.click(function(evt) {
+      evt.preventDefault();
+      onCreate();
+    });
     forms.forEach(function(form) {
       var li = $("<li></li>");
       li.click(function(evt) {
-        cb(form);
+        onClick(form);
       });
       li.text(form.name);
       list.append(li);
@@ -30718,19 +30735,33 @@ var Slide = {
     forms.forEach(function(form) {
       var li = $("<li></li>");
       li.click(function(evt) {
-        Slide.presentModalFormFromIdentifiers(form.fields, user.profile, cb);
+        Slide.presentModalForm(form, user.profile, cb);
       });
       li.text(form.name);
       list.append(li);
     })
   },
 
-  presentModalFormFromIdentifiers: function (identifiers, userData, cb) {
+  presentModalForm: function (vendorForm, userData, cb) {
+      var identifiers = vendorForm.fields;
       var modal = this.prepareModal();
       this.Form.createFromIdentifiers(modal.find('.slide-modal-body'), identifiers, function (form) {
         form.build(userData, {
           onSubmit: function () {
-            cb(form, form.getUserData());
+            cb(vendorForm, form, form.getUserData(), form.getPatchedUserData());
+          }
+        });
+        modal.show();
+        $(window).trigger('resize');
+    });
+  },
+
+  presentModalFormWithIdentifiers: function (identifiers, userData, cb) {
+      var modal = this.prepareModal();
+      this.Form.createFromIdentifiers(modal.find('.slide-modal-body'), identifiers, function (form) {
+        form.build(userData, {
+          onSubmit: function () {
+            cb(form);
           }
         });
         modal.show();
@@ -30819,7 +30850,7 @@ Actor.prototype.listen = function(cb) {
 exports["default"] = Actor;
 },{"./api":3}],3:[function(require,module,exports){
 "use strict";
-var HOST = 'api-sandbox.slide.life';
+var HOST = 'slide-dev.ngrok.com';
 
 exports["default"] = {
   endpoint: function(/* protocol, */ path) {
@@ -31939,8 +31970,9 @@ var VendorForm = function(name, fields, vendorId) {
   this.vendor = vendorId;
 };
 
-VendorForm.get = function(id, cb) {
-  api.get('/vendor_forms/' + id, {
+VendorForm.get = function(vendor, id, cb) {
+  api.get('/vendors/'+vendor.id+'/vendor_forms/' + id, {
+    data: { checksum: vendor.checksum },
     success: function(vendor) {
       cb(VendorForm.fromObject(vendor));
     }
@@ -31955,6 +31987,7 @@ VendorForm.fromObject = function(obj) {
   var form = new VendorForm(obj.name, obj.form_fields, obj.vendor_id);
   form.vendor_key = obj.vendor_key;
   form.id = obj.id;
+  form.responses = obj.responses;
   return form;
 };
 
@@ -31978,13 +32011,13 @@ VendorUser.prototype.fromObject = function(obj) {
   this.symmetricKey = obj.symmetricKey;
 };
 
-VendorUser.prototype.load = function(user, cb) {
+VendorUser.prototype.load = function(cb) {
   var self = this;
-  $.get(Slide.endpoint('/vendor_users/' + this.uuid),
-    function(vendor) {
-      self.fromObject(vendor, user);
+  api.get('/vendor_users/' + this.uuid,
+    { success: function(vendor) {
+      self.fromObject(vendor);
       cb(self);
-    });
+    }});
 };
 
 VendorUser.createRelationship = function(user, vendor, cb) {
@@ -31993,7 +32026,7 @@ VendorUser.createRelationship = function(user, vendor, cb) {
     keys = k;
   });
   var key = Slide.crypto.AES.generateKey();
-  var userKey = Slide.crypto.encryptStringWithPackedKey(key, vendor.publicKey);
+  var userKey = Slide.crypto.encryptStringWithPackedKey(key, user.publicKey);
   var vendorKey = Slide.crypto.encryptStringWithPackedKey(key, vendor.publicKey);
   var checksum = Slide.crypto.encryptStringWithPackedKey('', user.publicKey);
   api.post('/vendors/'+vendor.id+'/vendor_users', {

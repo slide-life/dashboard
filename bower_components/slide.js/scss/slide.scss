@@ -203,6 +203,7 @@ $drop-shadow: 0px 2px 4px 0px rgba(160, 160, 160, 0.40);
   padding: 18px;
   height: 40px;
   border-bottom: $field-border;
+  position: relative;
 }
 
 .slide-modal-header .slide-logo {
@@ -210,6 +211,21 @@ $drop-shadow: 0px 2px 4px 0px rgba(160, 160, 160, 0.40);
   height: 40px;
   margin: 0 auto;
   background-image: url('../img/logo.jpg');
+}
+
+.slide-modal-action {
+  position: absolute;
+  top: 0;
+}
+
+.slide-modal-action a {
+  color: #333;
+  text-decoration: none;
+  line-height: 80px;
+}
+
+.slide-moda-action a:hover {
+  background: #ccc;
 }
 
 /* Slick styling */

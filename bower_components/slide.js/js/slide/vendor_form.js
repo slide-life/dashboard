@@ -6,8 +6,9 @@ var VendorForm = function(name, fields, vendorId) {
   this.vendor = vendorId;
 };
 
-VendorForm.get = function(id, cb) {
-  api.get('/vendor_forms/' + id, {
+VendorForm.get = function(vendor, id, cb) {
+  api.get('/vendors/'+vendor.id+'/vendor_forms/' + id, {
+    data: { checksum: vendor.checksum },
     success: function(vendor) {
       cb(VendorForm.fromObject(vendor));
     }
@@ -22,6 +23,7 @@ VendorForm.fromObject = function(obj) {
   var form = new VendorForm(obj.name, obj.form_fields, obj.vendor_id);
   form.vendor_key = obj.vendor_key;
   form.id = obj.id;
+  form.responses = obj.responses;
   return form;
 };
 
